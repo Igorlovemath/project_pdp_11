@@ -48,7 +48,46 @@ void mem_dump (adress begin, adress end)
     }
 }
 
-void test ()
+void test_file ()
+{
+    byte b;
+    int counter = 0, mall = 1;
+    test_t * adresses = malloc (10 * sizeof (test_t));
+    test_t * amount = malloc (10 * sizeof (test_t));
+
+    FILE * file = fopen ();
+
+    while (1)
+    {
+        if (counter > 10*mall)
+        {
+            mall++;
+            adresses = realloc (adresses, 10*mall * sizeof (test_t));
+            amount = realloc (amount, 10*mall * sizeof (test_t));
+        }
+
+        if (scanf ("%hx%hx", &adresses[counter], &amount[counter]) == EOF)
+            break;
+
+        for (int f = 0; f < amount[counter]; f++)
+        {
+            scanf ("%hhx", &b);
+            byte_write(adresses[counter] + f, b);
+        }
+        counter++;
+    }
+
+    for (int i = 0; i < counter; i++)
+    {
+        printf ("Block %d:\n", i);
+        mem_dump(adresses[i], adresses[i] + amount[i] - 1);
+    }
+
+    free (adresses);
+    free (amount);
+}
+
+void test_stdin ()
 {
     byte b;
     int counter = 0, mall = 1;
@@ -85,9 +124,9 @@ void test ()
     free (amount);
 }
 
-int main() {
+int main () {
 
-    test ();
+    test_file ();
 
     return 0;
 }
