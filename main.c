@@ -51,7 +51,6 @@ void mem_dump (adress begin, adress end)
 void test ()
 {
     byte b;
-    adress adr;
     int counter = 0, mall = 1;
     test_t * adresses = malloc (10 * sizeof (test_t));
     test_t * amount = malloc (10 * sizeof (test_t));
@@ -73,19 +72,22 @@ void test ()
             scanf ("%hhx", &b);
             byte_write(adresses[counter] + f, b);
         }
+        counter++;
     }
 
     for (int i = 0; i < counter; i++)
     {
         printf ("Block %d:\n", i);
-        mem_dump(adresses[i], adresses[i] + amount[i]);
+        mem_dump(adresses[i], adresses[i] + amount[i] - 1);
     }
+
+    free (adresses);
+    free (amount);
 }
 
 int main() {
 
     test ();
-    printf ("HMMMMM");
 
     return 0;
 }
