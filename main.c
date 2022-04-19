@@ -1,10 +1,13 @@
 #include <stdio.h>
+#include <malloc.h>
 #include <assert.h>
 #define MEMSIZE 64*1024 // 64 Kb // 2^16 // 0000000000000000 -> 1111111111111111 // (2^4)^4 // 0000 -> FFFF
 
 typedef unsigned char byte; // 8 bits
 typedef unsigned short int word; //  16 bits
 typedef word adress; // 16 bits
+typedef adress test_t; // 16 bits
+
 byte mem [MEMSIZE]; //64 Kb
 
 void byte_write (adress adr, byte b)
@@ -34,24 +37,55 @@ word word_read (adress adr)
     return w;
 }
 
+void mem_dump (adress begin, adress end)
+{
+    byte b;
+
+    for (int i = 0; i < end - begin + 1; i++)
+    {
+        b = byte_read(begin + i);
+        printf ("%hhx\n", b);
+    }
+}
+
 void test ()
 {
-    byte a = 0x0a;
-    byte b = 0x0b;
-    word w = 0x0b0a;
-    adress ad = 6;
+    byte b;
+    adress adr;
+    int counter = 0, mall = 1;
+    test_t * adresses = malloc (10 * sizeof (test_t));
+    test_t * amount = malloc (10 * sizeof (test_t));
 
-    word_write(6, a, b);
+    while (1)
+    {
+        if (counter > 10*mall)
+        {
+            mall++;
+            adresses = realloc (adresses, 10*mall * sizeof (test_t));
+            amount = realloc (amount, 10*mall * sizeof (test_t));
+        }
 
-    word w_read = word_read (6);
+        if (scanf ("%hx%hx", &adresses[counter], &amount[counter]) == EOF)
+            break;
 
-    printf ("%0hx = %0hx", w_read, w);
+        for (int f = 0; f < amount[counter]; f++)
+        {
+            scanf ("%hhx", &b);
+            byte_write(adresses[counter] + f, b);
+        }
+    }
 
+    for (int i = 0; i < counter; i++)
+    {
+        printf ("Block %d:\n", i);
+        mem_dump(adresses[i], adresses[i] + amount[i]);
+    }
 }
 
 int main() {
 
     test ();
+    printf ("HMMMMM");
 
     return 0;
 }
