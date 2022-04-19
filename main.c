@@ -30,7 +30,7 @@ word word_read (adress adr)
 
     word w = (word) mem [adr + 1] << 8;
     w = w | (word) mem [adr];
-int pp;
+
     return w;
 }
 
