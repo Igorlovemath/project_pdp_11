@@ -48,7 +48,7 @@ void mem_dump (adress begin, adress end)
     }
 }
 
-void testFROMfile (char * path)
+void testFROMfile (const char * path)
 {
     byte b;
     int counter = 0, mall = 1;
@@ -128,7 +128,6 @@ void testFROMstdin ()
 int main (int argc, char * argv []) {
 
     testFROMfile (argv [1]);
-
 
     return 0;
 }
