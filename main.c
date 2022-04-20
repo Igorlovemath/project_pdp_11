@@ -48,14 +48,52 @@ void mem_dump (adress begin, adress end)
     }
 }
 
-void test_file ()
+void testFROMfile (char * path)
 {
     byte b;
     int counter = 0, mall = 1;
     test_t * adresses = malloc (10 * sizeof (test_t));
     test_t * amount = malloc (10 * sizeof (test_t));
 
-    FILE * file = fopen ();
+    FILE * file = fopen (path, "r");
+
+    while (1)
+    {
+        if (counter > 10*mall)
+        {
+            mall++;
+            adresses = realloc (adresses, 10*mall * sizeof (test_t));
+            amount = realloc (amount, 10*mall * sizeof (test_t));
+        }
+
+        if (fscanf (file, "%hx%hx", &adresses[counter], &amount[counter]) == EOF)
+            break;
+
+        for (int f = 0; f < amount[counter]; f++)
+        {
+            fscanf (file, "%hhx", &b);
+            byte_write(adresses[counter] + f, b);
+        }
+        counter++;
+    }
+
+    for (int i = 0; i < counter; i++)
+    {
+        printf ("Block %d:\n", i);
+        mem_dump(adresses[i], adresses[i] + amount[i] - 1);
+    }
+
+    fclose (file);
+    free (adresses);
+    free (amount);
+}
+
+void testFROMstdin ()
+{
+    byte b;
+    int counter = 0, mall = 1;
+    test_t * adresses = malloc (10 * sizeof (test_t));
+    test_t * amount = malloc (10 * sizeof (test_t));
 
     while (1)
     {
@@ -87,46 +125,10 @@ void test_file ()
     free (amount);
 }
 
-void test_stdin ()
-{
-    byte b;
-    int counter = 0, mall = 1;
-    test_t * adresses = malloc (10 * sizeof (test_t));
-    test_t * amount = malloc (10 * sizeof (test_t));
+int main (int argc, char * argv []) {
 
-    while (1)
-    {
-        if (counter > 10*mall)
-        {
-            mall++;
-            adresses = realloc (adresses, 10*mall * sizeof (test_t));
-            amount = realloc (amount, 10*mall * sizeof (test_t));
-        }
+    testFROMfile (argv [1]);
 
-        if (scanf ("%hx%hx", &adresses[counter], &amount[counter]) == EOF)
-            break;
-
-        for (int f = 0; f < amount[counter]; f++)
-        {
-            scanf ("%hhx", &b);
-            byte_write(adresses[counter] + f, b);
-        }
-        counter++;
-    }
-
-    for (int i = 0; i < counter; i++)
-    {
-        printf ("Block %d:\n", i);
-        mem_dump(adresses[i], adresses[i] + amount[i] - 1);
-    }
-
-    free (adresses);
-    free (amount);
-}
-
-int main () {
-
-    test_file ();
 
     return 0;
 }
