@@ -1,3 +1,4 @@
+/*
 #include <stdio.h>
 #include <malloc.h>
 #include <assert.h>
@@ -5,29 +6,29 @@
 
 typedef unsigned char byte; // 8 bits
 typedef unsigned short int word; //  16 bits
-typedef word adress; // 16 bits
-typedef adress test_t; // 16 bits
+typedef word adr; // 16 bits
+typedef adr test_t; // 16 bits
 
 byte mem [MEMSIZE]; //64 Kb
 
-void byte_write (adress adr, byte b)
+void byte_write (adr adr, byte b)
 {
     mem [adr] = b;
 }
 
-byte byte_read (adress adr)
+byte byte_read (adr adr)
 {
     return mem [adr];
 }
 
-void word_write (adress adr, byte a, byte b)
+void word_write (adr adr, byte a, byte b)
 {
     assert (adr % 2 == 0);
     mem [adr] = a;
     mem [adr + 1] = b;
 }
 
-word word_read (adress adr)
+word word_read (adr adr)
 {
     assert (adr % 2 == 0);
 
@@ -37,7 +38,7 @@ word word_read (adress adr)
     return w;
 }
 
-void mem_dump (adress begin, adress end)
+void mem_dump (adr begin, adr end)
 {
     byte b;
 
@@ -127,8 +128,9 @@ void testFROMstdin ()
 
 int main (int argc, char * argv []) {
 
-    testFROMfile (argv [1]);
+    testFROMfile (argv [argc - 1]);
 
     return 0;
 }
 
+*/

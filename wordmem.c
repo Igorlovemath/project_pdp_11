@@ -1,49 +1,97 @@
-/*
 #include <stdio.h>
+#include <stdlib.h>
 #include <assert.h>
+#include <malloc.h>
 #define MEMSIZE 64*1024 // 64 Kb // 2^16 // 0000000000000000 -> 1111111111111111 // (2^4)^4 // 0000 -> FFFF
 
 typedef unsigned char byte; // 8 bits
 typedef unsigned short int word; //  16 bits
-typedef word adress; // 16 bits
-word mem [MEMSIZE/2]; //32 Kb
+typedef word adr; // 16 bits
+word mem [MEMSIZE] = {}; //32 Kb
+typedef adr test_t; // 16 bits
 
-void byte_write (adress adr, byte b)
+void b_write (adr a, byte b)
 {
-    if (adr % 2 == 0)
-        mem [adr] = (mem [adr] & 0xFF00) | (word) b;
+    word w = (word) b;
+
+    if (a % 2 == 0)
+        mem [a] = (mem [a] & 0xFF00) | w;
 
     else
-        mem [adr] = (mem [adr] & 0x00FF) | ((word) b << 8);
+    {
+        w = w << 8;
+        mem [a - 1] = (mem [a - 1] & 0x00FF) | w;
+    }
 }
 
-byte byte_read (adress adr)
+byte b_read (adr a)
 {
-    if (adr % 2 == 0)
-        return (byte) mem [adr];
+    if (a % 2 == 0)
+        return (byte) mem [a];
 
-    return (byte) (mem [adr] >> 8);
+    word w = mem [a - 1] >> 8;
+
+    return (byte) w;
 }
 
-void word_write (adress adr, word w)
+void w_write (adr a, word w)
 {
-    assert (adr % 2 == 0);
-    mem [adr] = w;
+    assert (a % 2 == 0);
+    mem [a] = w;
 }
 
-word word_read (adress adr)
+word w_read (adr a)
 {
-    assert (adr % 2 == 0);
+    assert (a % 2 == 0);
 
-    return mem [adr];
+    return mem [a];
 }
 
-void test ()
+void mem_dump (adr begin, word n)
+{
+    assert (begin % 2 == 0);
+
+    word w;
+
+    for (adr i = 0; i < n / 2; i++)
+    {
+        w = w_read(begin + i * 2);
+        printf ("%06ho : %06ho\n", begin + i * 2, w);
+    }
+}
+
+void load_file ()
+{
+    byte b;
+    int counter = 0;
+    test_t adress, amount;
+
+    while (scanf ("%hx%hx", &adress, &amount) != EOF)
+    {
+        for (int f = 0; f < amount; f++)
+        {
+            scanf ("%hhx", &b);
+            b_write(adress + f, b);
+        }
+    }
+}
+
+int main()
+{
+
+
+    return 0;
+}
+
+
+
+
+/*void test ()
 {
     byte a = 0x0a;
     byte b = 0x0b;
     word w = 0x0b0a;
-    adress ad = 6;
+    adr ad = 6;
 
     word_write(ad, w);
 
@@ -64,12 +112,4 @@ void test ()
     w_read = word_read (ad);
     printf ("4: %0hx = %0hx\n", w_read, w);
 
-}
-
-int main() {
-
-    test ();
-
-    return 0;
-}
-*/
+}*/
