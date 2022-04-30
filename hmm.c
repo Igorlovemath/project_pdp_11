@@ -1,5 +1,3 @@
-#ifndef PROJECT_PDP_11_INTERFACE_H
-#define PROJECT_PDP_11_INTERFACE_H
 
 
 void b_write (adr a, byte b)
@@ -69,6 +67,3 @@ void load_file ()
 }
 
 
-
-
-#endif //PROJECT_PDP_11_INTERFACE_H
