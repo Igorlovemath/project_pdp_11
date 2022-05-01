@@ -23,6 +23,7 @@ extern word reg [];*/
 Command cmd [] = {
         {0170000, 0010000, "mov", do_mov, 0},
         {0170000, 0060000, "add", do_add, 0},
+        {0177777, 0000000, "halt", do_halt, 0},
         {0000000, 0000000, "\0" , do_nothing, 100}
 };
 
@@ -38,18 +39,18 @@ Arg get_mr (word w, int boolb)
         case 0: // R1
             res.adr = reg_num;
             res.val = reg [reg_num];
-            trace ("R%o ", reg_num);
+            trace ("R%o", reg_num);
             break;
 
         case 1: // (R1)
             res.adr = reg [reg_num];
 
             if (boolb)
-                res.val = b_read (res.adr);
+                res.val = b_read (res.adr, 0);
             else
-                res.val = w_read (res.adr);
+                res.val = w_read (res.adr, 0);
 
-            trace ("(R%o) ", reg_num);
+            trace ("(R%o)", reg_num);
             break;
 
         case 2: // (R3)+   #3
@@ -57,20 +58,20 @@ Arg get_mr (word w, int boolb)
 
             if (boolb)
             {
-                res.val = b_read (res.adr);
+                res.val = b_read (res.adr, 0);
                 reg [reg_num] += 1;
             }
 
             else
             {
-                res.val = w_read (res.adr);
+                res.val = w_read (res.adr, 0);
                 reg [reg_num] += 2;
             }
 
             if (reg_num == 7)
-                trace ("#%o ", res.val);
+                trace ("#%o", res.val);
             else
-                trace ("(R%o)+ ", reg_num);
+                trace ("(R%o)+", reg_num);
             break;
 
         default:
@@ -89,7 +90,7 @@ void run ()
 
     while (pc != 32 * 1024)
     {
-        w = w_read (pc);
+        w = w_read (pc, 0);
         trace ("%06o %06o: ", pc, w);
         pc += 2;
 
@@ -101,18 +102,24 @@ void run ()
             {
                 trace ("%s ", cmd[i].name);
 
-                ss = get_mr(w >> 6, cmd[i].boolb);
-                dd = get_mr(w, cmd[i].boolb);
+                if ((w & cmd[i].mask) == 0000000)
+                    do_halt();
 
-                cmd[i].do_func ();
-                k = 1;
+                else
+                {
+                    ss = get_mr(w >> 6, cmd[i].boolb);
+                    trace (", ");
+                    dd = get_mr(w, cmd[i].boolb);
+                    trace ("\n");
 
-                trace ("\n");
+                    cmd[i].do_func ();
+                    k = 1;
+                }
             }
         }
 
         if (!k)
-            trace ("unknown\n");
+            printf ("unknown\n");
     }
 }
 

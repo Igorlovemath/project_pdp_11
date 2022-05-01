@@ -47,10 +47,10 @@ typedef struct
 
 Arg get_mr (word w, int boolb);
 void run ();
-void b_write (adr a, byte b);
-byte b_read (adr a);
-void w_write (adr a, word w);
-word w_read (adr a);
+void b_write (adr a, byte b, int regs);
+byte b_read (adr a, int regs);
+void w_write (adr a, word w, int regs);
+word w_read (adr a, int regs);
 void mem_dump (adr begin, word n);
 void load_file ();
 stricoun load_file_2 ();
@@ -95,14 +95,6 @@ int main()
     run ();
 
     trace ("\n");
-
-    for (int i = 0; i < 8; i++)
-    {
-        trace ("R%d: %06ho", i, reg[i]);
-
-        if (i == 3)
-            trace ("\n");
-    }
 
     return 0;
 }

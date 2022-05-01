@@ -3,15 +3,25 @@
 
 void do_halt ()  // stop
 {
-    printf ("THE END");
+    trace ("\n");
+
+    for (int i = 0; i < 8; i++)
+    {
+        trace ("R%d: %06ho ", i, reg[i]);
+
+        if (i == 3)
+            trace ("\n");
+    }
+
+    trace ("\n");
+
+    printf ("THE END\n");
     exit (0);
 }
 
 void do_mov ()   // d=s
 {
-    trace ("> %06o <", dd.adr);
-    w_write (dd.adr, ss.val);
-
+    w_write (dd.adr, ss.val, 1);
 }
 
 void do_movb (); // d=s

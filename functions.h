@@ -1,40 +1,82 @@
 #ifndef PROJECT_PDP_11_FUNCTIONS_H
 #define PROJECT_PDP_11_FUNCTIONS_H
 
-void b_write (adr a, byte b)
+void b_write (adr a, byte b, int regs)
 {
     word w = (word) b;
 
-    if (a % 2 == 0)
-        mem [a] = (mem [a] & 0xFF00) | w;
+    if (regs)
+    {
+        if (a % 2 == 0)
+            reg [a] = (reg [a] & 0xFF00) | w;
+
+        else
+        {
+            w = w << 8;
+            reg [a - 1] = (reg [a - 1] & 0x00FF) | w;
+        }
+    }
 
     else
     {
-        w = w << 8;
-        mem [a - 1] = (mem [a - 1] & 0x00FF) | w;
+        if (a % 2 == 0)
+            mem [a] = (mem [a] & 0xFF00) | w;
+
+        else
+        {
+            w = w << 8;
+            mem [a - 1] = (mem [a - 1] & 0x00FF) | w;
+        }
     }
 }
 
-byte b_read (adr a)
+byte b_read (adr a, int regs)
 {
-    if (a % 2 == 0)
-        return (byte) mem [a];
+    word w;
 
-    word w = mem [a - 1] >> 8;
+    if (regs)
+    {
+        if (a % 2 == 0)
+            return (byte) reg [a];
+
+        w = reg [a - 1] >> 8;
+    }
+
+    else
+    {
+        if (a % 2 == 0)
+            return (byte) mem [a];
+
+        w = mem [a - 1] >> 8;
+    }
 
     return (byte) w;
 }
 
-void w_write (adr a, word w)
+void w_write (adr a, word w, int regs)
 {
-    assert (a % 2 == 0);
-    mem [a] = w;
+    if (regs)
+    {
+        assert (a >= 0 && a <= 7);
+        reg [a] = w;
+    }
+
+    else
+    {
+        assert (a % 2 == 0);
+        mem [a] = w;
+    }
 }
 
-word w_read (adr a)
+word w_read (adr a, int regs)
 {
-    assert (a % 2 == 0);
+    if (regs)
+    {
+        assert (a >= 0 && a <= 7);
+        return reg [a];
+    }
 
+    assert (a % 2 == 0);
     return mem [a];
 }
 
@@ -46,7 +88,7 @@ void mem_dump (adr begin, word n)
 
     for (adr i = 0; i < n / 2; i++)
     {
-        w = w_read(begin + i * 2);
+        w = w_read(begin + i * 2, 0);
         printf ("%06ho : %06ho\n", begin + i * 2, w);
     }
 }
@@ -62,7 +104,7 @@ void load_file ()
         for (int f = 0; f < amount; f++)
         {
             scanf ("%hhx", &b);
-            b_write(adress + f, b);
+            b_write(adress + f, b, 0);
         }
     }
 }
@@ -87,7 +129,7 @@ stricoun load_file_2 ()
         for (int f = 0; f < array[counter].amount; f++)
         {
             scanf ("%hhx", &b);
-            b_write(array[counter].adress + f, b);
+            b_write(array[counter].adress + f, b, 0);
         }
         counter++;
     }
