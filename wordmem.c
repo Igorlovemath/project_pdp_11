@@ -15,10 +15,68 @@ typedef adr test_t; // 16 bits
 word mem [2 * MEMSIZE] = {}; //64 Kb
 word reg [8];
 
-#include "interface.h"
+typedef struct
+{
+    word mask;
+    word opcode;
+    char * name;
+    void (*do_func)(void);
+    int boolb;
+
+} Command;
+
+typedef struct
+{
+    word val;
+    word adr;
+}Arg;
+Arg ss, dd;
+
+typedef struct
+{
+    test_t adress;
+    test_t amount;
+} adramo;
+
+typedef struct
+{
+    adramo * str;
+    int count;
+
+} stricoun;
+
+Arg get_mr (word w, int boolb);
+void run ();
+void b_write (adr a, byte b);
+byte b_read (adr a);
+void w_write (adr a, word w);
+word w_read (adr a);
+void mem_dump (adr begin, word n);
+void load_file ();
+stricoun load_file_2 ();
+void trace (char * string, ...);
+
+void do_halt (); // stop
+void do_mov ();  // d=s
+void do_movb (); // d=s
+void do_add ();  // d=s+d
+void do_adcb (); // d=d+C
+void do_aslb (); // d=d*2
+void do_asrb (); // d=d/2
+void do_cmpb (); // s-d
+void do_comb (); // d=~d;
+void do_decb (); // d=d-1
+void do_incb (); // d=d+1
+void do_jmp ();  // PC=d
+void do_jsr ();  // r=PC, PC=d
+void do_negb (); // d=-d
+void do_sbc ();  // d=d-C
+void do_sub ();  // d=d-s
+void do_nothing () {}
+
+#include "functions.h"
 #include "commands.h"
 #include "run.h"
-
 
 int main()
 {
@@ -31,6 +89,20 @@ int main()
     }
 
     free (a.str);
+
+    trace ("\n");
+
+    run ();
+
+    trace ("\n");
+
+    for (int i = 0; i < 8; i++)
+    {
+        trace ("R%d: %06ho", i, reg[i]);
+
+        if (i == 3)
+            trace ("\n");
+    }
 
     return 0;
 }

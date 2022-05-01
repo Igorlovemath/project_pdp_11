@@ -1,18 +1,5 @@
-#ifndef PROJECT_PDP_11_INTERFACE_H
-#define PROJECT_PDP_11_INTERFACE_H
-
-typedef struct
-{
-    test_t adress;
-    test_t amount;
-} adramo;
-
-typedef struct
-{
-    adramo * str;
-    int count;
-
-} stricoun;
+#ifndef PROJECT_PDP_11_FUNCTIONS_H
+#define PROJECT_PDP_11_FUNCTIONS_H
 
 void b_write (adr a, byte b)
 {
@@ -388,4 +375,4 @@ void trace (char * string, ...)
 
 
 
-#endif //PROJECT_PDP_11_INTERFACE_H
+#endif //PROJECT_PDP_11_FUNCTIONS_H

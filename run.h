@@ -1,22 +1,12 @@
 #ifndef PROJECT_PDP_11_RUN_H
 #define PROJECT_PDP_11_RUN_H
 
-extern word mem [];
-extern word reg [];
+/*extern word mem [];
+extern word reg [];*/
 
 #ifndef pc
 #define pc reg [7]
 #endif
-
-typedef struct
-{
-    word mask;
-    word opcode;
-    char * name;
-    void (*do_func)(void);
-    int boolb;
-
-} Command;
 
 //       code   SS     DD
 //mask : 0000 xxxxxx xxxxxx
@@ -33,7 +23,7 @@ typedef struct
 Command cmd [] = {
         {0170000, 0010000, "mov", do_mov, 0},
         {0170000, 0060000, "add", do_add, 0},
-        {0000000, 0000000, "\0" , do_nothing, 0}
+        {0000000, 0000000, "\0" , do_nothing, 100}
 };
 
 Arg get_mr (word w, int boolb)
@@ -100,28 +90,29 @@ void run ()
     while (pc != 32 * 1024)
     {
         w = w_read (pc);
-        pc += 2;
-
         trace ("%06o %06o: ", pc, w);
+        pc += 2;
 
         k = 0;
 
-        for (int i = 0; strcmp (cmd[i].name, "\0") != 0; i++)
+        for (int i = 0; cmd[i].boolb != 100; i++)
         {
             if ((w & cmd[i].mask) == cmd[i].opcode)
             {
-                trace ("%s\n", cmd[i].name);
+                trace ("%s ", cmd[i].name);
 
                 ss = get_mr(w >> 6, cmd[i].boolb);
                 dd = get_mr(w, cmd[i].boolb);
 
                 cmd[i].do_func ();
                 k = 1;
+
+                trace ("\n");
             }
         }
 
         if (!k)
-            trace ("unknown");
+            trace ("unknown\n");
     }
 }
 

@@ -3,4 +3,4 @@ project(Project_PDP_11 C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(Project_PDP_11 wordmem.c run.h interface.h commands.h)
+add_executable(Project_PDP_11 wordmem.c run.h functions.h commands.h)
