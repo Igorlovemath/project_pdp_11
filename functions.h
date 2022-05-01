@@ -415,6 +415,17 @@ void trace (char * string, ...)
     }
 }
 
+void reg_print ()
+{
+    for (int i = 0; i < 8; i++)
+    {
+        trace ("R%d: %06ho ", i, reg[i]);
+
+        if (i == 3)
+            trace ("\n");
+    }
+}
+
 
 
 #endif //PROJECT_PDP_11_FUNCTIONS_H

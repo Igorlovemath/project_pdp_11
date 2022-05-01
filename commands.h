@@ -4,15 +4,7 @@
 void do_halt ()  // stop
 {
     trace ("\n");
-
-    for (int i = 0; i < 8; i++)
-    {
-        trace ("R%d: %06ho ", i, reg[i]);
-
-        if (i == 3)
-            trace ("\n");
-    }
-
+    reg_print();
     trace ("\n");
 
     printf ("THE END\n");
@@ -27,7 +19,7 @@ void do_mov ()   // d=s
 void do_movb (); // d=s
 void do_add ()  // d=s+d
 {
-
+    w_write (dd.adr, ss.val + dd.val, 1);
 }
 void do_adcb (); // d=d+C
 void do_aslb (); // d=d*2

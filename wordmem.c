@@ -55,6 +55,7 @@ void mem_dump (adr begin, word n);
 void load_file ();
 stricoun load_file_2 ();
 void trace (char * string, ...);
+void reg_print ();
 
 void do_halt (); // stop
 void do_mov ();  // d=s
