@@ -14,6 +14,7 @@ typedef struct
     word opcode;
     char * name;
     void (*do_func)(void);
+    int boolb;
 
 } Command;
 
@@ -30,10 +31,65 @@ typedef struct
 
 
 Command cmd [] = {
-        {0170000, 0010000, "mov", do_mov},
-        {0170000, 0060000, "add", do_add},
-        {0000000, 0000000, "\0" , do_nothing}
+        {0170000, 0010000, "mov", do_mov, 0},
+        {0170000, 0060000, "add", do_add, 0},
+        {0000000, 0000000, "\0" , do_nothing, 0}
 };
+
+Arg get_mr (word w, int boolb)
+{
+    Arg res;
+
+    int reg_num = w & 7;
+    int reg_mode = (w >> 3) & 7;
+
+    switch (reg_mode)
+    {
+        case 0: // R1
+            res.adr = reg_num;
+            res.val = reg [reg_num];
+            trace ("R%o ", reg_num);
+            break;
+
+        case 1: // (R1)
+            res.adr = reg [reg_num];
+
+            if (boolb)
+                res.val = b_read (res.adr);
+            else
+                res.val = w_read (res.adr);
+
+            trace ("(R%o) ", reg_num);
+            break;
+
+        case 2: // (R3)+   #3
+            res.adr = reg [reg_num];
+
+            if (boolb)
+            {
+                res.val = b_read (res.adr);
+                reg [reg_num] += 1;
+            }
+
+            else
+            {
+                res.val = w_read (res.adr);
+                reg [reg_num] += 2;
+            }
+
+            if (reg_num == 7)
+                trace ("#%o ", res.val);
+            else
+                trace ("(R%o)+ ", reg_num);
+            break;
+
+        default:
+            fprintf (stderr, "Mode %o NOT IMPLEMENTED YET!\n", reg_mode);
+            exit (1);
+    }
+
+    return res;
+}
 
 void run ()
 {
@@ -46,7 +102,7 @@ void run ()
         w = w_read (pc);
         pc += 2;
 
-        printf ("%06o %06o: ", pc, w);
+        trace ("%06o %06o: ", pc, w);
 
         k = 0;
 
@@ -54,14 +110,18 @@ void run ()
         {
             if ((w & cmd[i].mask) == cmd[i].opcode)
             {
-                printf ("%s", cmd[i].name);
+                trace ("%s\n", cmd[i].name);
+
+                ss = get_mr(w >> 6, cmd[i].boolb);
+                dd = get_mr(w, cmd[i].boolb);
+
                 cmd[i].do_func ();
                 k = 1;
             }
         }
 
         if (!k)
-            printf ("unknown");
+            trace ("unknown");
     }
 }
 

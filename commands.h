@@ -1,16 +1,26 @@
 #ifndef PROJECT_PDP_11_COMMANDS_H
 #define PROJECT_PDP_11_COMMANDS_H
 
+typedef struct
+{
+    word val;
+    word adr;
+}Arg;
+Arg ss, dd;
+
+
 void do_halt ()  // stop
 {
     printf ("THE END");
     exit (0);
 }
 
+
 void do_mov ()   // d=s
 {
-
+    w_write (dd.adr, ss.val);
 }
+
 void do_movb (); // d=s
 void do_add ()  // d=s+d
 {

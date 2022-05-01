@@ -70,122 +70,275 @@ void load_file ()
 
 void trace (char * string, ...)
 {
-    va_list p;
-    va_start(p, string);
-    int int_type;
-    long int lint_type;
-    long long int llint_type;
-    double double_type;
-    long double ldouble_type;
-    char char_type;
-    char * str_type;
+    int a = 1;
 
-    for (int i = 0; string [i] != '\0'; i++)
+    if (a)
     {
-        if (string [i] != '%' && string [i] != '\\')
-            printf ("%c", string [i]);
+        va_list p;
+        va_start(p, string);
+        int int_type;
+        long int lint_type;
+        long long int llint_type;
+        double double_type;
+        long double ldouble_type;
+        char char_type;
+        char *str_type;
 
-        else if (string [i] == '%')
-        {
-            switch (string [++i])
+        char * result;
+        int resi;
+
+        for (int i = 0; string[i] != '\0'; i++) {
+
+            if (string[i] != '%' && string[i] != '\\')
+                printf("%c", string[i]);
+
+            else if (string[i] == '%')
             {
-                case 'd':
-                    int_type = va_arg(p, int);
-                    printf ("%d", int_type);
-                    break;
+                result = calloc (100, sizeof (char));
+                result [0] = '%';
+                resi = 1;
 
-                case 'l':
-                    if (string [i+1] == 'd')
-                    {
-                        lint_type = va_arg (p, long int);
-                        printf ("%ld", lint_type);
-                        i += 1;
-                    }
+                i++;
 
-                    else if (string [i+1] == 'l')
-                    {
-                        if (string [i+2] != 'd')
+                while (isdigit (string [i]))
+                {
+                    result [resi] = string[i];
+                    resi++;
+                    i++;
+                }
+
+                switch (string[i]) {
+
+                    case 'h':
+                        if (string[i + 1] == 'd')
                         {
-                            printf ("unknown type of parameter in function: trace (char * string, ...):  %%ll%c", string [i+2]);
-                            exit (0);
+                            int_type = va_arg (p, int);
+                            strcat (result, "hd");
+                            printf(result, int_type);
+                            free (result);
+                            i += 1;
                         }
 
-                        llint_type = va_arg (p, long long int);
-                        printf ("%lld", llint_type);
-                        i += 2;
-                    }
+                        else if (string[i + 1] == 'o')
+                        {
+                            int_type = va_arg (p, int);
+                            strcat (result, "ho");
+                            printf(result, int_type);
+                            free (result);
+                            i += 1;
+                        }
 
-                    else
-                        printf ("unknown type of parameter in function: trace (char * string, ...):  %%l%c", string [i+2]);
-                        exit (0);
-                    break;
+                        else if (string[i + 1] == 'x')
+                        {
+                            int_type = va_arg (p, int);
+                            strcat (result, "hx");
+                            printf(result, int_type);
+                            free (result);
+                            i += 1;
+                        }
 
-                case 'L':
-                    if (string [i+1] != 'f')
-                    {
-                        printf ("unknown type of parameter in function: trace (char * string, ...):  %%L%c", string [i+1]);
-                        exit (0);
-                    }
+                        else if (string[i + 1] == 'h')
+                        {
 
-                    ldouble_type = va_arg (p, long double);
-                    printf ("%Lf", ldouble_type);
-                    i += 1;
-                    break;
+                            if (string[i + 2] == 'd')
+                            {
+                                int_type = va_arg (p, int);
+                                strcat (result, "hhd");
+                                printf(result, int_type);
+                                free (result);
+                                i += 2;
+                            }
 
-                case 'f':
-                    double_type = va_arg (p, double);
-                    printf ("%f", double_type);
-                    break;
+                            else if (string[i + 2] == 'o')
+                            {
+                                int_type = va_arg (p, int);
+                                strcat (result, "hho");
+                                printf(result, int_type);
+                                free (result);
+                                i += 2;
+                            }
 
-                case 'c':
-                    char_type = va_arg (p, int);
-                    printf ("%c", char_type);
-                    break;
+                            else if (string[i + 2] == 'x')
+                            {
+                                int_type = va_arg (p, int);
+                                strcat (result, "hhx");
+                                printf(result, int_type);
+                                free (result);
+                                i += 2;
+                            }
 
-                case 's':
-                    str_type = va_arg (p, char *);
-                    printf ("%s", str_type);
-                    break;
+                            else
+                            {
+                                printf ("unknown type of parameter in function: trace (char * string, ...)");
+                                free (result);
+                                exit(0);
+                            }
+                        }
+                        break;
 
-                default:
-                    printf ("unknown type of parameter in function: trace (char * string, ...):  %%%c", string [i]);
+                    case 'd':
+                        int_type = va_arg(p, int);
+                        strcat (result, "d");
+                        printf(result, int_type);
+                        free (result);
+                        break;
+
+                    case 'o':
+                        int_type = va_arg(p, int);
+                        strcat (result, "o");
+                        printf(result, int_type);
+                        free (result);
+                        break;
+
+                    case 'x':
+                        int_type = va_arg(p, int);
+                        strcat (result, "x");
+                        printf(result, int_type);
+                        free (result);
+                        break;
+
+                    case 'l':
+                        if (string[i + 1] == 'd')
+                        {
+                            lint_type = va_arg (p, long int);
+                            strcat (result, "ld");
+                            printf(result, lint_type);
+                            free (result);
+                            i += 1;
+                        }
+
+                        else if (string[i + 1] == 'o')
+                        {
+                            lint_type = va_arg (p, long int);
+                            strcat (result, "lo");
+                            printf(result, lint_type);
+                            free (result);
+                            i += 1;
+                        }
+
+                        else if (string[i + 1] == 'x')
+                        {
+                            lint_type = va_arg (p, long int);
+                            strcat (result, "lx");
+                            printf(result, lint_type);
+                            free (result);
+                            i += 1;
+                        }
+
+                        else if (string[i + 1] == 'l')
+                        {
+
+                            if (string[i + 2] == 'd')
+                            {
+                                llint_type = va_arg (p, long long int);
+                                strcat (result, "lld");
+                                printf(result, llint_type);
+                                free (result);
+                                i += 2;
+                            }
+
+                            else if (string[i + 2] == 'o')
+                            {
+                                llint_type = va_arg (p, long long int);
+                                strcat (result, "llo");
+                                printf(result, llint_type);
+                                free (result);
+                                i += 2;
+                            }
+
+                            else if (string[i + 2] == 'x')
+                            {
+                                llint_type = va_arg (p, long long int);
+                                strcat (result, "llx");
+                                printf(result, llint_type);
+                                free (result);
+                                i += 2;
+                            }
+
+                            else
+                            {
+                                printf ("unknown type of parameter in function: trace (char * string, ...)");
+                                free (result);
+                                exit(0);
+                            }
+                        }
+                        break;
+
+                    case 'L':
+                        if (string[i + 1] != 'f') {
+                            printf("unknown type of parameter in function: trace (char * string, ...)");
+                            free (result);
+                            exit(0);
+                        }
+
+                        ldouble_type = va_arg (p, long double);
+                        strcat (result, "Lf");
+                        printf(result, ldouble_type);
+                        free (result);
+                        i += 1;
+                        break;
+
+                    case 'f':
+                        double_type = va_arg (p, double);
+                        strcat (result, "f");
+                        printf(result, double_type);
+                        free (result);
+                        break;
+
+                    case 'c':
+                        char_type = va_arg (p, int);
+                        strcat (result, "c");
+                        printf(result, char_type);
+                        free (result);
+                        break;
+
+                    case 's':
+                        str_type = va_arg (p, char *);
+                        strcat (result, "s");
+                        printf(result, str_type);
+                        free (result);
+                        break;
+
+                    default:
+                        printf("unknown type of parameter in function: trace (char * string, ...)");
+                        free (result);
+                }
             }
+
+            else
+                switch (string[++i]) {
+                    case 'n':
+                        printf("\n");
+                        break;
+
+                    case '0':
+                        break;
+
+                    case 'a':
+                        printf("\a");
+
+                    case 'b':
+                        printf("\b");
+
+                    case 't':
+                        printf("\t");
+
+                    case 'v':
+                        printf("\v");
+
+                    case 'f':
+                        printf("\f");
+
+                    case 'r':
+                        printf("\r");
+
+                    default:
+                        printf("unknown type of parameter in function: trace (char * string, ...)");
+                }
         }
 
-        else
-            switch (string [++i])
-            {
-                case 'n':
-                    printf ("\n");
-                    break;
-
-                case '0':
-                    break;
-
-                case 'a':
-                    printf ("\a");
-
-                case 'b':
-                    printf ("\b");
-
-                case 't':
-                    printf ("\t");
-
-                case 'v':
-                    printf ("\v");
-
-                case 'f':
-                    printf ("\f");
-
-                case 'r':
-                    printf ("\r");
-
-                default:
-                    printf ("unknown type of parameter in function: trace (char * string, ...):  \\%c", string [i]);
-            }
+        va_end(p);
     }
-
-    va_end(p);
 }
 
 
