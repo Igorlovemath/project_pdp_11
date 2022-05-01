@@ -1,6 +1,18 @@
 #ifndef PROJECT_PDP_11_INTERFACE_H
 #define PROJECT_PDP_11_INTERFACE_H
 
+typedef struct
+{
+    test_t adress;
+    test_t amount;
+} adramo;
+
+typedef struct
+{
+    adramo * str;
+    int count;
+
+} stricoun;
 
 void b_write (adr a, byte b)
 {
@@ -66,6 +78,39 @@ void load_file ()
             b_write(adress + f, b);
         }
     }
+}
+
+stricoun load_file_2 ()
+{
+    byte b;
+    int counter = 0, mall = 1;
+    adramo * array = malloc (10 * sizeof (adramo));
+
+    while (1)
+    {
+        if (counter > 10*mall)
+        {
+            mall++;
+            array = realloc (array, 10*mall * sizeof (adramo));
+        }
+
+        if (scanf ("%hx%hx", &array[counter].adress, &array[counter].amount) == EOF)
+            break;
+
+        for (int f = 0; f < array[counter].amount; f++)
+        {
+            scanf ("%hhx", &b);
+            b_write(array[counter].adress + f, b);
+        }
+        counter++;
+    }
+
+    stricoun a;
+
+    a.str = array;
+    a.count = counter;
+
+    return a;
 }
 
 void trace (char * string, ...)

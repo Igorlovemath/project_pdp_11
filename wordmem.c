@@ -22,6 +22,15 @@ word reg [8];
 
 int main()
 {
+    stricoun a = load_file_2();
+
+    for (int i = 0; i < a.count; i++)
+    {
+        trace ("Block %d:\n", i);
+        mem_dump(a.str[i].adress, a.str[i].amount);
+    }
+
+    free (a.str);
 
     return 0;
 }
