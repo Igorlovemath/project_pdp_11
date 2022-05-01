@@ -12,7 +12,10 @@ void do_mov ()   // d=s
 
 }
 void do_movb (); // d=s
-void do_add ();  // d=s+d
+void do_add ()  // d=s+d
+{
+
+}
 void do_adcb (); // d=d+C
 void do_aslb (); // d=d*2
 void do_asrb (); // d=d/2

@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <malloc.h>
 #include <string.h>
+#include <stdarg.h>
 
 #define MEMSIZE 64*1024 // 64 Kb // 2^16 // 0000000000000000 -> 1111111111111111 // (2^4)^4 // 0000 -> FFFF
 typedef unsigned char byte; // 8 bits
@@ -21,8 +22,8 @@ word reg [8];
 
 int main()
 {
-
-
+    char a = 'T';
+    trace ("%c", a);
 
     return 0;
 }

@@ -72,20 +72,8 @@ build edit_cache: phony CMakeFiles/edit_cache.util
 
 build cmake_object_order_depends_target_Project_PDP_11: phony || CMakeFiles/Project_PDP_11.dir
 
-build CMakeFiles/Project_PDP_11.dir/main.c.o: C_COMPILER__Project_PDP_11_Debug /home/igor/Math,Prog,Eng/Programming/Project$ PDP-11/main.c || cmake_object_order_depends_target_Project_PDP_11
-  DEP_FILE = CMakeFiles/Project_PDP_11.dir/main.c.o.d
-  FLAGS = -g -std=gnu99
-  OBJECT_DIR = CMakeFiles/Project_PDP_11.dir
-  OBJECT_FILE_DIR = CMakeFiles/Project_PDP_11.dir
-
 build CMakeFiles/Project_PDP_11.dir/wordmem.c.o: C_COMPILER__Project_PDP_11_Debug /home/igor/Math,Prog,Eng/Programming/Project$ PDP-11/wordmem.c || cmake_object_order_depends_target_Project_PDP_11
   DEP_FILE = CMakeFiles/Project_PDP_11.dir/wordmem.c.o.d
-  FLAGS = -g -std=gnu99
-  OBJECT_DIR = CMakeFiles/Project_PDP_11.dir
-  OBJECT_FILE_DIR = CMakeFiles/Project_PDP_11.dir
-
-build CMakeFiles/Project_PDP_11.dir/hmm.c.o: C_COMPILER__Project_PDP_11_Debug /home/igor/Math,Prog,Eng/Programming/Project$ PDP-11/hmm.c || cmake_object_order_depends_target_Project_PDP_11
-  DEP_FILE = CMakeFiles/Project_PDP_11.dir/hmm.c.o.d
   FLAGS = -g -std=gnu99
   OBJECT_DIR = CMakeFiles/Project_PDP_11.dir
   OBJECT_FILE_DIR = CMakeFiles/Project_PDP_11.dir
@@ -98,7 +86,7 @@ build CMakeFiles/Project_PDP_11.dir/hmm.c.o: C_COMPILER__Project_PDP_11_Debug /h
 #############################################
 # Link the executable Project_PDP_11
 
-build Project_PDP_11: C_EXECUTABLE_LINKER__Project_PDP_11_Debug CMakeFiles/Project_PDP_11.dir/main.c.o CMakeFiles/Project_PDP_11.dir/wordmem.c.o CMakeFiles/Project_PDP_11.dir/hmm.c.o
+build Project_PDP_11: C_EXECUTABLE_LINKER__Project_PDP_11_Debug CMakeFiles/Project_PDP_11.dir/wordmem.c.o
   FLAGS = -g
   OBJECT_DIR = CMakeFiles/Project_PDP_11.dir
   POST_BUILD = :
