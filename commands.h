@@ -7,7 +7,6 @@ void do_halt ()  // stop
     exit (0);
 }
 
-
 void do_mov ()   // d=s
 {
     trace ("> %06o <", dd.adr);

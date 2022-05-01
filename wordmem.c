@@ -72,7 +72,7 @@ void do_jsr ();  // r=PC, PC=d
 void do_negb (); // d=-d
 void do_sbc ();  // d=d-C
 void do_sub ();  // d=d-s
-void do_nothing () {}
+void do_nothing ();
 
 #include "functions.h"
 #include "commands.h"
