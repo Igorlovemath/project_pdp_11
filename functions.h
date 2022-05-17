@@ -89,7 +89,7 @@ void mem_dump (adr begin, word n)
     for (adr i = 0; i < n / 2; i++)
     {
         w = w_read(begin + i * 2, 0);
-        printf ("%06ho : %06ho\n", begin + i * 2, w);
+        trace ("%06ho : %06ho\n", begin + i * 2, w);
     }
 }
 

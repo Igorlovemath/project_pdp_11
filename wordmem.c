@@ -12,7 +12,7 @@ typedef unsigned short int word; //  16 bits
 typedef word adr; // 16 bits
 typedef adr test_t; // 16 bits
 
-word mem [2 * MEMSIZE] = {}; //64 Kb
+word mem [MEMSIZE] = {}; //64 Kb
 word reg [8];
 
 typedef struct

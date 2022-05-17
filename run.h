@@ -1,9 +1,6 @@
 #ifndef PROJECT_PDP_11_RUN_H
 #define PROJECT_PDP_11_RUN_H
 
-/*extern word mem [];
-extern word reg [];*/
-
 #ifndef pc
 #define pc reg [7]
 #endif
